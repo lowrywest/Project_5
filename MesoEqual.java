@@ -11,7 +11,7 @@ public class MesoEqual
 	 */
 	private String StiD;
 	private HashMap<String, Integer> equalAsciiVals;
-	private ArrayList<String> keyValues= new ArrayList<String>();
+	private static ArrayList<String> keyValues= new ArrayList<String>();
 	
 	/*
 	 * The mesoEqual constructor
@@ -82,6 +82,10 @@ public class MesoEqual
 		return calAvgStid;
 	}
 	
+	public static ArrayList<String> getSTID()
+	{
+		return keyValues;
+	}
 	/*
 	 * this method caclulates the STID values with equal average Ascii values
 	 */

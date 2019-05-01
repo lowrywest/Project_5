@@ -17,8 +17,8 @@ public class GraphicsPanel extends JPanel implements MouseListener
 	/**
 	 * Width and height for the panel. Width matches the enclosing frame.
 	 */
-	private static final int PANEL_WIDTH = 800;
-	private static final int PANEL_HEIGHT = 500;
+	private static final int PANEL_WIDTH = 20;
+	private static final int PANEL_HEIGHT = 20;
 
 	/**
 	 * Size of the regions.
