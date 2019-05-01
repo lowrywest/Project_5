@@ -1,27 +1,75 @@
+
 import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 
-public class GraphicsPanel extends JFrame
+public class GraphicsPanel extends JPanel implements MouseListener
 {
-	JSlider slider= new JSlider(1,4);
-	JButton Show_Station= new JButton();
-	JButton Calculate_HD= new JButton();
-	JButton Add_Station= new JButton();
-	JLabel Enter_Dist= new JLabel("Enter Hamming Dist:");
-	JLabel Comp_With= new JLabel("Compare with:");
-	JLabel Dist0= new JLabel("Distance 0");
-	JLabel Dist1= new JLabel("Distance 1");
-	JLabel Dist2= new JLabel("Distance 2");
-	JLabel Dist3= new JLabel("Distance 3");
-	JLabel Dist4= new JLabel("Distance 4");
-	
+
+	/**
+	 * Width and height for the panel. Width matches the enclosing frame.
+	 */
+	private static final int PANEL_WIDTH = 800;
+	private static final int PANEL_HEIGHT = 500;
+
+	/**
+	 * Size of the regions.
+	 */
+	private static final int REGION_WIDTH = 50;
+	private static final int REGION_HEIGHT = 50;
+
+	/**
+	 * Define top-left corner of first region and x increment between corners.
+	 */
+	private static final int REGION_START_X = 50;
+	private static final int REGION_START_Y = 50;
+	private static final int REGION_INC_X = 60;
+
 	public GraphicsPanel()
 	{
-		this.setPreferredSize(new Dimension(1000, 1000));
+		this.setPreferredSize(new Dimension(PANEL_WIDTH,PANEL_HEIGHT));
+		this.addMouseListener(this);
 	}
 
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+
 }
+
