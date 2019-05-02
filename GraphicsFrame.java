@@ -83,6 +83,7 @@ public class GraphicsFrame extends JFrame
 		{
 			STIDvals.addItem(STIDs.get(i));
 		}
+		
 		this.setSize(FRAME_WIDTH,FRAME_HEIGHT);
 		this.setLayout(new GridLayout(2,2));
 		
@@ -101,10 +102,21 @@ public class GraphicsFrame extends JFrame
 		
 		slider.addChangeListener((l) ->
 		{
-			sliderVal.setEditable(true);
-			sliderVal = new JTextField(""+slider.getValue(), 10);
-			sliderVal.setEditable(false);
+			sliderVal.setText(""+slider.getValue());
 			sliderPan.updateUI();
+		}
+		);
+		
+		calcHD.addActionListener((e) ->
+		{
+			String temp= STIDs.get(STIDvals.getSelectedIndex());
+			ArrayList<Integer> numNodes= numNodes(temp);
+			dist0Field.setText(""+numNodes.get(0));
+			dist1Field.setText(""+numNodes.get(1));
+			dist2Field.setText(""+numNodes.get(2));
+			dist3Field.setText(""+numNodes.get(3));
+			dist4Field.setText(""+numNodes.get(4));
+			hammingDistPan.updateUI();
 		}
 		);
 		
@@ -194,6 +206,81 @@ public class GraphicsFrame extends JFrame
 	STIDVals.close();
 	return STIDs;
 	}
+	
+	  //Method for finding the hamming distance between two strings
+		public int singleHammDist(String first, String second)
+		{
+			//Variable to hold the hamming distance
+			int hamDist=0;
+			//loop through the string
+			for(int loc=0;loc<first.length();loc++)
+				{
+					//comparing the characters at the location
+					if(first.charAt(loc)!=second.charAt(loc))
+					{
+						//increment the hamming distance accordingly
+						hamDist++;
+					}
+				}
+			//Returning the hamming distance
+			return hamDist;
+		}
+
+		//comparing the whole ArrayList of STID Values to a given STID value
+		public ArrayList <Integer> numNodes(String inputSTID)
+		{
+			//Constructing a ArrayList to whold the number of nodes
+			ArrayList <Integer> nodes = new ArrayList<Integer>();
+			//Initializing the values to 0
+			nodes.add(0);
+			nodes.add(0); 
+			nodes.add(0);
+			nodes.add(0);
+			nodes.add(0);
+			//temp holds the current e count
+			int hammingDistance=0;
+			//Loops through the entire ArrayList of STID values
+			for(int i=0; i<STIDs.size();i++)
+			{
+				//checks to make sure the STID value is different than the one from the ArrayList
+				
+					   //gets the hamming Distance between the two STID values
+					   hammingDistance= singleHammDist(inputSTID, STIDs.get(i));
+					   if(hammingDistance==0)
+					   {
+						   nodes.set(0, nodes.get(0)+1);
+					   }
+					    //Looks to see if the hamming distance is 1
+					   else if(hammingDistance==1)
+						{
+							//increment the value of the nodes at 0
+							nodes.set(1, nodes.get(1)+1);
+						}
+						//Looks to see if the hamming distance is 2
+						else if(hammingDistance==2)
+						{
+							//increment the value of the nodes at 1
+							nodes.set(2, nodes.get(2)+1);
+						}
+						//Looks to see if the hamming distance is 3
+						else if(hammingDistance==3)
+						{
+							//increment the value of the nodes at 2
+							nodes.set(3, nodes.get(3)+1);
+						}
+						//if the hamming distance is 4
+						else 
+						{
+							//increment the value of the nodes at 3
+							nodes.set(4, nodes.get(4)+1);
+						}
+				
+			}
+			//return the ArrayList of node values
+			return nodes;
+			
+		}
+		
 	
 	
 	public static void main(String[] args) throws IOException
