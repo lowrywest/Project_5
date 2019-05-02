@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -35,6 +36,7 @@ public class GraphicsFrame extends JFrame
 	 */
 	JButton Show_Station= new JButton("Show Station");
 	JTextArea stationShown= new JTextArea(20,20);
+	JScrollPane scroll= new JScrollPane(stationShown);
 	
 	JButton Add_Station= new JButton("Add Station");
 	JTextField addStationField= new JTextField(5);
@@ -107,6 +109,27 @@ public class GraphicsFrame extends JFrame
 		}
 		);
 		
+		Show_Station.addActionListener((e) ->
+		{
+			int hamCompare=slider.getValue();
+			String STIDcommpare= STIDs.get(STIDvals.getSelectedIndex());
+			ArrayList<String> equalSTIDs= new ArrayList<String>();
+			for(int i=0; i< STIDs.size(); i++)
+			{
+				if(singleHammDist(STIDcommpare, STIDs.get(i))==hamCompare)
+				{
+					equalSTIDs.add(STIDs.get(i));
+				}
+			}
+			String output="";
+			for(int l=0; l<equalSTIDs.size(); l++)
+			{
+				output+=equalSTIDs.get(l)+"\n";
+			}
+			stationShown.setText(output);
+			
+		}
+		);
 		calcHD.addActionListener((e) ->
 		{
 			String temp= STIDs.get(STIDvals.getSelectedIndex());
@@ -119,6 +142,15 @@ public class GraphicsFrame extends JFrame
 			hammingDistPan.updateUI();
 		}
 		);
+		
+		Add_Station.addActionListener((e) ->
+		{
+			STIDs.add(addStationField.getText());
+			STIDvals.addItem(addStationField.getText());
+			hammingDistPan.updateUI();
+		}	
+		);
+		
 		
 	}
 	
@@ -136,6 +168,7 @@ public class GraphicsFrame extends JFrame
 		sliderPan.setLocation(10, 300);
 		panelHolder.add(sliderPan);
 		
+		showStationPan.add(scroll);
 		showStationPan.add(Show_Station);
 		showStationPan.add(stationShown);
 		showStationPan.setLocation(300, 300);
@@ -149,14 +182,19 @@ public class GraphicsFrame extends JFrame
 		hammingDistPan.add(new JLabel());
 		hammingDistPan.add(Dist0);
 		hammingDistPan.add(dist0Field);
+		dist0Field.setEditable(false);
 		hammingDistPan.add(Dist1);
 		hammingDistPan.add(dist1Field);
+		dist1Field.setEditable(false);
 		hammingDistPan.add(Dist2);
 		hammingDistPan.add(dist2Field);
+		dist2Field.setEditable(false);
 		hammingDistPan.add(Dist3);
 		hammingDistPan.add(dist3Field);
+		dist3Field.setEditable(false);
 		hammingDistPan.add(Dist4);
 		hammingDistPan.add(dist4Field);
+		dist4Field.setEditable(false);
 		panelHolder.add(hammingDistPan);
 		
 		addStationPan.add(Add_Station);
