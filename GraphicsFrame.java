@@ -1,27 +1,26 @@
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.GroupLayout;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeListener;
 
 public class GraphicsFrame extends JFrame 
 {
 	ArrayList<String> STIDs= new ArrayList<String>();
 	
-	private static final int FRAME_WIDTH = 600;
+	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEIGHT= 1000;
 	GraphicsPanel gp= new GraphicsPanel();
 	
@@ -35,8 +34,8 @@ public class GraphicsFrame extends JFrame
 	 * Making the Buttons
 	 */
 	JButton Show_Station= new JButton("Show Station");
-	JTextArea stationShown= new JTextArea(20,20);
-	JScrollPane scroll= new JScrollPane(stationShown);
+	JTextArea stationShown= new JTextArea(30,30);
+	JScrollPane scroll = new JScrollPane(stationShown);
 	
 	JButton Add_Station= new JButton("Add Station");
 	JTextField addStationField= new JTextField(5);
@@ -53,31 +52,30 @@ public class GraphicsFrame extends JFrame
 	JLabel Dist2= new JLabel("Distance 2");
 	JLabel Dist3= new JLabel("Distance 3");
 	JLabel Dist4= new JLabel("Distance 4");
-	JTextField dist0Field= new JTextField(5);
-	JTextField dist1Field= new JTextField(5);
-	JTextField dist2Field= new JTextField(5);
-	JTextField dist3Field= new JTextField(5);
-	JTextField dist4Field= new JTextField(5);
+	JTextField dist0Field= new JTextField(10);
+	JTextField dist1Field= new JTextField(10);
+	JTextField dist2Field= new JTextField(10);
+	JTextField dist3Field= new JTextField(10);
+	JTextField dist4Field= new JTextField(10);
 	/*
 	 * Making the Panels
 	 */
+	JTextField randomSTID= new JTextField(10);
+	JButton random= new JButton("Click to get a random STID value");
+	
+	JPanel randomPanel= new JPanel();
+	
 	JPanel sliderPan= new JPanel();
-	//GroupLayout sliderLayout=new GroupLayout(sliderPan);
 	
 	JPanel showStationPan= new JPanel();
-	//GroupLayout showStationLayout= new GroupLayout(showStationPan);
 	
 	JPanel compWithPan= new JPanel();
-	//GroupLayout compWithLayout= new GroupLayout(compWithPan);
 	
 	JPanel hammingDistPan= new JPanel();
-	//GroupLayout hammingDistLayout= new GroupLayout(hammingDistPan);
+
 	
 	JPanel addStationPan= new JPanel();
-	//GroupLayout addStationLayout= new GroupLayout(addStationPan);
 	
-	JPanel globalPanel= new JPanel();
-	//GroupLayout globalLayout= new GroupLayout(globalPanel);
 	public GraphicsFrame() throws IOException
 	{
 		STIDs=readInfo();
@@ -87,7 +85,7 @@ public class GraphicsFrame extends JFrame
 		}
 		
 		this.setSize(FRAME_WIDTH,FRAME_HEIGHT);
-		this.setLayout(new GridLayout(2,2));
+		this.setLayout(new GridLayout(2,1));
 		
 		for(int i=0; i<setUpVisuals().size(); i++)
 		{
@@ -96,11 +94,6 @@ public class GraphicsFrame extends JFrame
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
-		
-		
-		
-		//this.setupTextPoints();
-		//this.addMouseListener(this);
 		
 		slider.addChangeListener((l) ->
 		{
@@ -121,10 +114,10 @@ public class GraphicsFrame extends JFrame
 					equalSTIDs.add(STIDs.get(i));
 				}
 			}
-			String output="";
+			String output=" ";
 			for(int l=0; l<equalSTIDs.size(); l++)
 			{
-				output+=equalSTIDs.get(l)+"\n";
+				output+="  "+equalSTIDs.get(l)+"\n";
 			}
 			stationShown.setText(output);
 			
@@ -151,6 +144,12 @@ public class GraphicsFrame extends JFrame
 		}	
 		);
 		
+		random.addActionListener((e) ->
+		{
+			
+		}
+		);
+		
 		
 	}
 	
@@ -168,7 +167,7 @@ public class GraphicsFrame extends JFrame
 		sliderPan.setLocation(10, 300);
 		panelHolder.add(sliderPan);
 		
-		showStationPan.add(scroll);
+		//showStationPan.getContentPane.add(scroll);
 		showStationPan.add(Show_Station);
 		showStationPan.add(stationShown);
 		showStationPan.setLocation(300, 300);
@@ -200,6 +199,10 @@ public class GraphicsFrame extends JFrame
 		addStationPan.add(Add_Station);
 		addStationPan.add(addStationField);
 		panelHolder.add(addStationPan);
+		
+		randomPanel.add(random);
+		randomPanel.add(randomSTID);
+		panelHolder.add(randomPanel);
 		
 		return panelHolder;
 	}
