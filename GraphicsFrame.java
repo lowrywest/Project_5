@@ -3,7 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -61,6 +61,7 @@ public class GraphicsFrame extends JFrame
 	 * Making the Panels
 	 */
 	JTextField randomSTID= new JTextField(10);
+	
 	JButton random= new JButton("Click to get a random STID value");
 	
 	JPanel randomPanel= new JPanel();
@@ -71,7 +72,7 @@ public class GraphicsFrame extends JFrame
 	
 	JPanel compWithPan= new JPanel();
 	
-	JPanel hammingDistPan= new JPanel();
+	JPanel hammingDistPan= new JPanel(new GridLayout(4,3));
 
 	
 	JPanel addStationPan= new JPanel();
@@ -146,7 +147,16 @@ public class GraphicsFrame extends JFrame
 		
 		random.addActionListener((e) ->
 		{
-			
+			String letters= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			String randSTID= "";
+			for(int i=0; i<4; i++)
+			{
+			int random = (int)(Math.random() * 24 + 1);
+			randSTID+=letters.charAt(random)+"";
+			}
+			randomSTID.setText(randSTID);
+			STIDs.add(randSTID);
+			STIDvals.addItem(randSTID);
 		}
 		);
 		
@@ -167,7 +177,7 @@ public class GraphicsFrame extends JFrame
 		sliderPan.setLocation(10, 300);
 		panelHolder.add(sliderPan);
 		
-		//showStationPan.getContentPane.add(scroll);
+
 		showStationPan.add(Show_Station);
 		showStationPan.add(stationShown);
 		showStationPan.setLocation(300, 300);
@@ -178,7 +188,7 @@ public class GraphicsFrame extends JFrame
 		panelHolder.add(compWithPan);
 		
 		hammingDistPan.add(calcHD);
-		hammingDistPan.add(new JLabel());
+		//hammingDistPan.add(new JLabel());
 		hammingDistPan.add(Dist0);
 		hammingDistPan.add(dist0Field);
 		dist0Field.setEditable(false);
@@ -200,6 +210,7 @@ public class GraphicsFrame extends JFrame
 		addStationPan.add(addStationField);
 		panelHolder.add(addStationPan);
 		
+		randomSTID.setEditable(false);
 		randomPanel.add(random);
 		randomPanel.add(randomSTID);
 		panelHolder.add(randomPanel);
