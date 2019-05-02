@@ -1,5 +1,8 @@
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
@@ -11,11 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeListener;
 
-public class GraphicsFrame extends JFrame
+public class GraphicsFrame extends JFrame 
 {
-	ArrayList<String> STIDs= MesoEqual.getSTID();
-	//String[] STIDList= STIDs.toArray();
+	ArrayList<String> STIDs= new ArrayList<String>();
+	
 	private static final int FRAME_WIDTH = 600;
 	private static final int FRAME_HEIGHT= 1000;
 	GraphicsPanel gp= new GraphicsPanel();
@@ -38,8 +42,8 @@ public class GraphicsFrame extends JFrame
 	 * Making the Labels
 	 */
 	JLabel Comp_With= new JLabel("Compare with:");
-	@SuppressWarnings("unchecked")
-	JComboBox STIDvals= new JComboBox();
+	@SuppressWarnings("rawtypes")
+	JComboBox<String> STIDvals = new JComboBox();
 	
 	JButton calcHD= new JButton("Calculate HD");
 	JLabel Dist0= new JLabel("Distance 0");
@@ -72,8 +76,13 @@ public class GraphicsFrame extends JFrame
 	
 	JPanel globalPanel= new JPanel();
 	//GroupLayout globalLayout= new GroupLayout(globalPanel);
-	public GraphicsFrame()
+	public GraphicsFrame() throws IOException
 	{
+		STIDs=readInfo();
+		for (int i=0; i< STIDs.size(); i++)
+		{
+			STIDvals.addItem(STIDs.get(i));
+		}
 		this.setSize(FRAME_WIDTH,FRAME_HEIGHT);
 		this.setLayout(new GridLayout(2,2));
 		
@@ -84,13 +93,18 @@ public class GraphicsFrame extends JFrame
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
+		
+		
+		
 		//this.setupTextPoints();
 		//this.addMouseListener(this);
 		
 		slider.addChangeListener((l) ->
 		{
+			sliderVal.setEditable(true);
 			sliderVal = new JTextField(""+slider.getValue(), 10);
-			repaint();
+			sliderVal.setEditable(false);
+			sliderPan.updateUI();
 		}
 		);
 		
@@ -138,12 +152,54 @@ public class GraphicsFrame extends JFrame
 		panelHolder.add(addStationPan);
 		
 		return panelHolder;
-		
 	}
 	
-	public static void main(String[] args)
+	public ArrayList<String> readInfo() throws IOException
+	{
+		/*
+		 * holds the number of the STID value being read in 
+		 */
+		int loc=0;
+		String temp="";
+		/*
+		 * Constructing the Buffered reader
+		 */
+		BufferedReader STIDVals= new BufferedReader(new FileReader("Mesonet.txt"));
+
+		/*
+		 * loop through lines of the Mesonet.txt file
+		 */
+		while(loc<120)
+		{
+			/*
+			 * setting temp to the entire line at that location
+			 */
+			temp=STIDVals.readLine();
+			/*
+			 * changing the value from the entire line to just the STID value
+			 */
+			temp=temp.substring(0, 4);
+			/*
+			 * adding the STID value to the ArrayList
+			 */
+			STIDs.add(temp);
+			/*
+			 * Incrementing the location being read in
+			 */
+			loc++;
+		}
+	/*
+	 * Closing the BufferReader 
+	 */
+	STIDVals.close();
+	return STIDs;
+	}
+	
+	
+	public static void main(String[] args) throws IOException
 	{
 		GraphicsFrame GP= new GraphicsFrame();
+		
 	}
 	
 
