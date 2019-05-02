@@ -3,7 +3,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,34 +17,43 @@ import javax.swing.JTextField;
 
 public class GraphicsFrame extends JFrame 
 {
+	/*
+	 * Global ArrayList to Hold the info from the text file
+	 */
 	ArrayList<String> STIDs= new ArrayList<String>();
-	
+	/*
+	 * The constant variables for the Frame width and Height 
+	 */
 	private static final int FRAME_WIDTH = 1000;
 	private static final int FRAME_HEIGHT= 1000;
-	GraphicsPanel gp= new GraphicsPanel();
 	
 	/*
-	 * Making the slider and the Text Field 
+	 * Making the slider and the slider text field and the slider label 
 	 */
 	JSlider slider= new JSlider(JSlider.HORIZONTAL,1,4,1);
 	JTextField sliderVal= new JTextField(""+slider.getValue(),10);
 	JLabel Enter_Dist= new JLabel("Enter Hamming Dist:");
 	/*
-	 * Making the Buttons
+	 * Making the Show Station button, Text Area and the ScrollBar
 	 */
 	JButton Show_Station= new JButton("Show Station");
 	JTextArea stationShown= new JTextArea(30,30);
 	JScrollPane scroll = new JScrollPane(stationShown);
 	
+	/*
+	 * Making the add Station button and textField
+	 */
 	JButton Add_Station= new JButton("Add Station");
 	JTextField addStationField= new JTextField(5);
 	/*
-	 * Making the Labels
+	 *  Making the Compare with Label and Drop down box
 	 */
 	JLabel Comp_With= new JLabel("Compare with:");
 	@SuppressWarnings("rawtypes")
 	JComboBox<String> STIDvals = new JComboBox();
-	
+	/*
+	 * Making the Calculate Hamming Distance button labels and Textfields
+	 */
 	JButton calcHD= new JButton("Calculate HD");
 	JLabel Dist0= new JLabel("Distance 0");
 	JLabel Dist1= new JLabel("Distance 1");
@@ -58,56 +66,83 @@ public class GraphicsFrame extends JFrame
 	JTextField dist3Field= new JTextField(10);
 	JTextField dist4Field= new JTextField(10);
 	/*
-	 * Making the Panels
+	 * Making the Random STID creater's textField and Button
 	 */
 	JTextField randomSTID= new JTextField(10);
-	
 	JButton random= new JButton("Click to get a random STID value");
 	
+	/*
+	 * Making the Panels to hold the individual parts of the gui
+	 */
 	JPanel randomPanel= new JPanel();
-	
 	JPanel sliderPan= new JPanel();
-	
 	JPanel showStationPan= new JPanel();
-	
 	JPanel compWithPan= new JPanel();
-	
 	JPanel hammingDistPan= new JPanel(new GridLayout(4,3));
-
-	
 	JPanel addStationPan= new JPanel();
-	
+	/*
+	 * The Graphics Frame Constructor
+	 */
 	public GraphicsFrame() throws IOException
 	{
+		/*
+		 * Setting the Global arrayList to the STID values using the Read info method
+		 */
 		STIDs=readInfo();
+		/*
+		 * Adding the Strings from the ArrayList into the drop down box by looping through the arrayList
+		 */
 		for (int i=0; i< STIDs.size(); i++)
 		{
 			STIDvals.addItem(STIDs.get(i));
 		}
-		
+		/*
+		 * Setting the Size and Layout of the Frame
+		 */
 		this.setSize(FRAME_WIDTH,FRAME_HEIGHT);
 		this.setLayout(new GridLayout(2,1));
-		
+		/*
+		 * this loop goes through an arrayList that holds all the Panels
+		 * which have the buttons, lables, Text Fields, etc inside of them
+		 */
 		for(int i=0; i<setUpVisuals().size(); i++)
 		{
 			this.add(setUpVisuals().get(i));
 		}
-		
+		/*
+		 * setting the close operation and setting the window to visible
+		 */
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
-		
+		/*
+		 * This Listener looks at the slider 
+		 */
 		slider.addChangeListener((l) ->
 		{
+			/*
+			 * when the slider is changed the text field is updated to the value the slider is at
+			 */
 			sliderVal.setText(""+slider.getValue());
 			sliderPan.updateUI();
 		}
 		);
-		
+		/*
+		 * Show Station button is clicked
+		 */
 		Show_Station.addActionListener((e) ->
 		{
+			/*
+			 * the Hamming distance to compare the hamming distnce and the string selected in the drop down box
+			 */
 			int hamCompare=slider.getValue();
 			String STIDcommpare= STIDs.get(STIDvals.getSelectedIndex());
+			/*
+			 * holds the ones that are have the specified hamming distance
+			 */
 			ArrayList<String> equalSTIDs= new ArrayList<String>();
+			/*
+			 * looping through the arrayList
+			 */
 			for(int i=0; i< STIDs.size(); i++)
 			{
 				if(singleHammDist(STIDcommpare, STIDs.get(i))==hamCompare)
@@ -115,19 +150,40 @@ public class GraphicsFrame extends JFrame
 					equalSTIDs.add(STIDs.get(i));
 				}
 			}
+			/*
+			 * string to hold the output
+			 */
 			String output=" ";
+			/*
+			 * looping through to add to the output
+			 */
 			for(int l=0; l<equalSTIDs.size(); l++)
 			{
 				output+="  "+equalSTIDs.get(l)+"\n";
 			}
+			/*
+			 * updating the text area
+			 */
 			stationShown.setText(output);
 			
 		}
 		);
+		/*
+		 * when calcHD is pressed
+		 */
 		calcHD.addActionListener((e) ->
 		{
+			/*
+			 * holds the STID value to be compared from the drop down arrow
+			 */
 			String temp= STIDs.get(STIDvals.getSelectedIndex());
+			/*
+			 * uses the num nodes methods to get an arraylist of Intergers
+			 */
 			ArrayList<Integer> numNodes= numNodes(temp);
+			/*
+			 * updating the text fields
+			 */
 			dist0Field.setText(""+numNodes.get(0));
 			dist1Field.setText(""+numNodes.get(1));
 			dist2Field.setText(""+numNodes.get(2));
@@ -136,24 +192,43 @@ public class GraphicsFrame extends JFrame
 			hammingDistPan.updateUI();
 		}
 		);
-		
+		/*
+		 * whne the add Station button is pressed
+		 */
 		Add_Station.addActionListener((e) ->
 		{
+			/*
+			 * takes the STring from the Text field and adds it to the ArrayList and the DRop down box
+			 */
 			STIDs.add(addStationField.getText());
 			STIDvals.addItem(addStationField.getText());
 			hammingDistPan.updateUI();
 		}	
 		);
-		
+		/*
+		 * Creating a Random STID value
+		 */
 		random.addActionListener((e) ->
 		{
+			/*
+			 * string that holds the alphabet
+			 */
 			String letters= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			/*
+			 * String that holds the output
+			 */
 			String randSTID= "";
+			/*
+			 * Picking a random number between one and 24 and then taking that character fromm the alphabet
+			 */
 			for(int i=0; i<4; i++)
 			{
 			int random = (int)(Math.random() * 24 + 1);
 			randSTID+=letters.charAt(random)+"";
 			}
+			/*
+			 * outputting the reandom string ad adding it to the Arraylist and the dropdown
+			 */
 			randomSTID.setText(randSTID);
 			STIDs.add(randSTID);
 			STIDvals.addItem(randSTID);
@@ -165,30 +240,53 @@ public class GraphicsFrame extends JFrame
 	
 	public ArrayList<JPanel> setUpVisuals()
 	{
+		/*
+		 * ArrayList to hold all the panels
+		 */
 		ArrayList<JPanel> panelHolder= new ArrayList<JPanel>();
+		/*
+		 * fomratting the slider
+		 */
 		slider.setSnapToTicks(true);
 		slider.setPaintTicks(true);
 		slider.setPaintLabels(true);
 		slider.setMajorTickSpacing(1);
 		sliderVal.setEditable(false);
+		/*
+		 * adding the things associated with the slider to the Slider panel
+		 */
 		sliderPan.add(Enter_Dist);
 		sliderPan.add(sliderVal);
 		sliderPan.add(slider);
 		sliderPan.setLocation(10, 300);
+		/*
+		 * adding the panel to the arraylist
+		 */
 		panelHolder.add(sliderPan);
-		
 
+		/*
+		 * adding the things associated with the show station to the show station panel
+		 */
 		showStationPan.add(Show_Station);
 		showStationPan.add(stationShown);
 		showStationPan.setLocation(300, 300);
+		/*
+		 * adding the panel to the arraylist
+		 */
 		panelHolder.add(showStationPan);
 		
+		/*
+		 * adding the things associated with the Compare with to the show compare With panel
+		 */
 		compWithPan.add(Comp_With);
 		compWithPan.add(STIDvals);
 		panelHolder.add(compWithPan);
 		
 		hammingDistPan.add(calcHD);
-		//hammingDistPan.add(new JLabel());
+
+		/*
+		 * adding the things associated with the hamming distance to the show hamming distance panel
+		 */
 		hammingDistPan.add(Dist0);
 		hammingDistPan.add(dist0Field);
 		dist0Field.setEditable(false);
@@ -205,11 +303,15 @@ public class GraphicsFrame extends JFrame
 		hammingDistPan.add(dist4Field);
 		dist4Field.setEditable(false);
 		panelHolder.add(hammingDistPan);
-		
+		/*
+		 * adding the things associated with the add station to the add station panel
+		 */
 		addStationPan.add(Add_Station);
 		addStationPan.add(addStationField);
 		panelHolder.add(addStationPan);
-		
+		/*
+		 * adding the things associated with the random station to the random station panel
+		 */
 		randomSTID.setEditable(false);
 		randomPanel.add(random);
 		randomPanel.add(randomSTID);
@@ -333,8 +435,6 @@ public class GraphicsFrame extends JFrame
 			
 		}
 		
-	
-	
 	public static void main(String[] args) throws IOException
 	{
 		GraphicsFrame GP= new GraphicsFrame();
